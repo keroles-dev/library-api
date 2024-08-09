@@ -1,0 +1,5 @@
+version: "3.8"
+services:
+  api_service:
+    container_name: library_api_container
+    image: library_api_image
