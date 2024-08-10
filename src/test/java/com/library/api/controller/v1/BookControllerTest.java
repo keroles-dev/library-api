@@ -72,7 +72,6 @@ class BookControllerTest {
     void createBookSuccess() throws Exception {
         when(bookService.create(createBookDto)).thenReturn(createBookDto.toBook());
 
-        // Perform POST request to /user/new with valid UserDto
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/books")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(createBookDtoJson))
