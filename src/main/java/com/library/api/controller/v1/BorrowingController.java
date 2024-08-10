@@ -1,5 +1,6 @@
 package com.library.api.controller.v1;
 
+import com.library.api.exception.ResourceAlreadyExistsException;
 import com.library.api.exception.ResourceNotFoundException;
 import com.library.api.model.Borrowing;
 import com.library.api.model.dto.CreateBorrowingDto;
@@ -30,7 +31,7 @@ public class BorrowingController {
             @Positive(message = "The book id is invalid") @PathVariable long bookId,
             @Positive(message = "The patron id is invalid") @PathVariable long patronId,
             @Valid @RequestBody CreateBorrowingDto createBorrowingDto
-    ) throws ResourceNotFoundException {
+    ) throws ResourceNotFoundException, ResourceAlreadyExistsException {
         Borrowing createdBorrowing = borrowingService.create(bookId, patronId, createBorrowingDto);
 
         return new ResponseEntity<>(createdBorrowing, HttpStatus.CREATED);
@@ -41,7 +42,7 @@ public class BorrowingController {
             @Positive(message = "The book id is invalid") @PathVariable long bookId,
             @Positive(message = "The patron id is invalid") @PathVariable long patronId,
             @Valid @RequestBody UpdateBorrowingDto updateBorrowingDto
-    ) throws ResourceNotFoundException {
+    ) throws Exception {
         Borrowing updatedBorrowing = borrowingService.update(bookId, patronId, updateBorrowingDto);
 
         return new ResponseEntity<>(updatedBorrowing, HttpStatus.OK);

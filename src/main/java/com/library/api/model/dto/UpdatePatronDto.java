@@ -3,11 +3,14 @@ package com.library.api.model.dto;
 import com.library.api.model.Patron;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Optional;
 
 @Data
+@Builder
 public class UpdatePatronDto {
     private final Optional<
             @Size(min = 1, max = 255, message = "Name length must be between 1 and 255 character.")

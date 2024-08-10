@@ -1,5 +1,6 @@
 package com.library.api.service.v1;
 
+import com.library.api.exception.ResourceAlreadyExistsException;
 import com.library.api.exception.ResourceNotFoundException;
 import com.library.api.model.Book;
 import com.library.api.model.dto.CreateBookDto;
@@ -9,7 +10,6 @@ import com.library.api.service.v1.interfaces.BookService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -20,10 +20,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book create(CreateBookDto createBookDto) throws ResourceNotFoundException {
+    public Book create(CreateBookDto createBookDto) throws ResourceAlreadyExistsException {
         final List<Book> books = bookRepository.findByIsbn(createBookDto.getIsbn());
 
-        if (!books.isEmpty()) throw new ResourceNotFoundException("Book ISBN is already exists");
+        if (!books.isEmpty()) throw new ResourceAlreadyExistsException("Book ISBN is already exists");
 
         return bookRepository.save(createBookDto.toBook());
     }
@@ -39,13 +39,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book update(long id, UpdateBookDto updateBookDto) throws ResourceNotFoundException {
+    public Book update(long id, UpdateBookDto updateBookDto) throws ResourceNotFoundException, ResourceAlreadyExistsException {
         Book existingBook = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book not found"));
 
-        if(!updateBookDto.getIsbn().get().isEmpty()){
+        if(updateBookDto.getIsbn().isPresent()){
             final List<Book> books = bookRepository.findByIsbn(updateBookDto.getIsbn().get());
 
-            if (!books.isEmpty()) throw new ResourceNotFoundException("Book ISBN is already exists");
+            if (!books.isEmpty()) throw new ResourceAlreadyExistsException("Book ISBN is already exists");
         }
 
         existingBook = updateBookDto.migrate(existingBook);

@@ -1,5 +1,6 @@
 package com.library.api.controller.v1;
 
+import com.library.api.exception.ResourceAlreadyExistsException;
 import com.library.api.exception.ResourceNotFoundException;
 import com.library.api.model.Book;
 import com.library.api.model.dto.CreateBookDto;
@@ -28,7 +29,7 @@ public class BookController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Book> createBook(@RequestBody CreateBookDto createBookDto) throws ResourceNotFoundException {
+    public ResponseEntity<Book> createBook(@Valid @RequestBody CreateBookDto createBookDto) throws ResourceNotFoundException, ResourceAlreadyExistsException {
         Book createdBook = bookService.create(createBookDto);
 
         return new ResponseEntity<>(createdBook, HttpStatus.CREATED);
@@ -51,8 +52,8 @@ public class BookController {
     @PutMapping("/{id}")
     public ResponseEntity<Book> updateBook(
             @Positive(message = "The book id is invalid") @PathVariable long id,
-            @RequestBody UpdateBookDto updateBookDto
-    ) throws ResourceNotFoundException {
+            @Valid @RequestBody UpdateBookDto updateBookDto
+    ) throws ResourceNotFoundException, ResourceAlreadyExistsException {
         Book updatedBook = bookService.update(id, updateBookDto);
 
         return new ResponseEntity<>(updatedBook, HttpStatus.OK);

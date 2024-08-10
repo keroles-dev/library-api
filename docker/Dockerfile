@@ -5,7 +5,7 @@ WORKDIR /home/app
 COPY pom.xml ./
 COPY src ./src
 
-RUN mvn -f ./pom.xml clean package -DskipTests
+RUN mvn -f ./pom.xml clean package
 
 EXPOSE $SPRING_LOCAL_PORT
 

@@ -2,12 +2,15 @@ package com.library.api.model.dto;
 
 import com.library.api.model.Book;
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.ISBN;
 
 import java.util.Optional;
 
 @Data
+@Builder
 public class UpdateBookDto {
     private final Optional<@ISBN(message = "ISBN number is invalid.") String> isbn = Optional.empty();
 

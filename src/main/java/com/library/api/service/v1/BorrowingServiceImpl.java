@@ -1,5 +1,6 @@
 package com.library.api.service.v1;
 
+import com.library.api.exception.ResourceAlreadyExistsException;
 import com.library.api.exception.ResourceNotFoundException;
 import com.library.api.model.Book;
 import com.library.api.model.Borrowing;
@@ -30,7 +31,7 @@ public class BorrowingServiceImpl implements BorrowingService {
 
     @Transactional
     @Override
-    public Borrowing create(long bookId, long patronId, CreateBorrowingDto createBorrowingDto) throws ResourceNotFoundException {
+    public Borrowing create(long bookId, long patronId, CreateBorrowingDto createBorrowingDto) throws ResourceNotFoundException, ResourceAlreadyExistsException {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
 
@@ -41,7 +42,7 @@ public class BorrowingServiceImpl implements BorrowingService {
         final List<Borrowing> borrowings = borrowingRepository.getActiveBorrowingByBookIdAndPatronId(book.getId(), patron.getId());
 
         // check if book is already borrowed
-        if (!borrowings.isEmpty()) throw new ResourceNotFoundException("Book is already borrowed.");
+        if (!borrowings.isEmpty()) throw new ResourceAlreadyExistsException("Book is already borrowed.");
 
         final Borrowing borrowing = createBorrowingDto.toBorrowing();
         borrowing.setBook(book);
@@ -52,7 +53,7 @@ public class BorrowingServiceImpl implements BorrowingService {
 
     @Transactional
     @Override
-    public Borrowing update(long bookId, long patronId, UpdateBorrowingDto updateBorrowingDto) throws ResourceNotFoundException {
+    public Borrowing update(long bookId, long patronId, UpdateBorrowingDto updateBorrowingDto) throws Exception {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
 
@@ -64,7 +65,7 @@ public class BorrowingServiceImpl implements BorrowingService {
 
         // check if borrowing exists and only one record returns
         if (borrowings.isEmpty()) throw new ResourceNotFoundException("Borrowing record not found or already returned");
-        if (borrowings.size() != 1) throw new ResourceNotFoundException("Something wrong happened, try again later");
+        if (borrowings.size() != 1) throw new Exception("Something wrong happened, try again later");
 
         final Borrowing updatedBorrowing = updateBorrowingDto.migrate(borrowings.get(0));
 

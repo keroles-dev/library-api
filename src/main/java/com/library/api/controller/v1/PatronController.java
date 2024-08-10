@@ -26,7 +26,7 @@ public class PatronController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Patron> createPatron(@RequestBody CreatePatronDto createPatronDto) {
+    public ResponseEntity<Patron> createPatron(@Valid @RequestBody CreatePatronDto createPatronDto) {
         Patron createdPatron = patronService.create(createPatronDto);
         
         return new ResponseEntity<>(createdPatron, HttpStatus.CREATED);
@@ -49,7 +49,7 @@ public class PatronController {
     @PutMapping("/{id}")
     public ResponseEntity<Patron> updatePatron(
             @Positive(message = "The patron id is invalid") @PathVariable long id,
-            @RequestBody UpdatePatronDto updatePatronDto
+            @Valid @RequestBody UpdatePatronDto updatePatronDto
     ) throws ResourceNotFoundException {
         Patron updatedPatron = patronService.update(id, updatePatronDto);
 

@@ -1,7 +1,11 @@
 package com.library.api.model;
 
+import com.library.api.exception.ResourceAlreadyExistsException;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.util.Set;
@@ -9,6 +13,9 @@ import java.util.Set;
 @Entity
 @Table(name = "books")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Accessors(chain = true)
 public class Book {
     @Id

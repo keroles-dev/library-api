@@ -2,17 +2,19 @@ package com.library.api.model.dto;
 
 import com.library.api.model.Book;
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.ISBN;
 
 @Data
+@Builder
 public class CreateBookDto {
     @NotNull(message = "ISBN number is required.")
     @ISBN(message = "ISBN number is invalid.")
     private String isbn;
 
     @NotNull(message = "Title is required.")
-    @NotEmpty(message = "Title can not be empty.")
+    @NotBlank(message = "Title can not be empty.")
     @Size(min = 1, max = 255, message = "Title length must be between 1 and 255 character.")
     private String title;
 
